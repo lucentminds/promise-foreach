@@ -1,0 +1,19 @@
+{
+	"name": "promise-foreach",
+	"date": "01-05-2017",
+	"description": "NodeJs module that loops over a list of items that require asynchronous processing that must be processed in sequential order.",
+	"main": "promise-foreach.js",
+	"author": {
+		"name": "Scott Johnson"
+	},
+	"license": "MIT",
+	"version": "node 4.0.0",
+	"engine": "node 0.10.0",
+	"repository":{
+		"type": "git",
+		"url": "https://github.com/lucentminds/promise-foreach.git"
+	},
+	"dependencies": {
+		"q": ">=1.4.1"
+	}
+}
