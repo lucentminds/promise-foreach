@@ -7,8 +7,10 @@
 		"name": "Scott Johnson"
 	},
 	"license": "MIT",
-	"version": "node 4.0.0",
-	"engine": "node 0.10.0",
+	"version": "node 0.0.1",
+	"engines" : { 
+		"node" : ">=4.0.0" 
+	},
 	"repository":{
 		"type": "git",
 		"url": "https://github.com/lucentminds/promise-foreach.git"
