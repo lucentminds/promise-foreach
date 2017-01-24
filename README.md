@@ -14,7 +14,7 @@ npm install git+https://github.com/lucentminds/promise-foreach.git
 ```js
 var forEach = require( 'promise-foreach' );
 
-forEach( [ 'a', 'b', 'c' ], function( oCurrent, aItems ){
+forEach( [ 'a', 'b', 'c' ], function( oCurrent, next ){
 
     console.log( 'The current index is', oCurrent.index );
 
