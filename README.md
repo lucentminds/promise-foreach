@@ -18,7 +18,7 @@ forEach( [ 'a', 'b', 'c' ], function( oCurrent, next ){
 
     console.log( 'The current index is', oCurrent.index );
 
-    doSomethingSync( oCurrent.value, function( err, result ){
+    doSomethingAsync( oCurrent.value, function( err, result ){
         if( err ) {
             return console.log( 'Error:', err );
         }
