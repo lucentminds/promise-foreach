@@ -11,11 +11,11 @@
 /* jslint node: true */
 
 var Q = require( 'q' );
-var forEach = module.exports = function( aList, fnEach, scope ) {
-    var aItems = aList ?aList.slice( 0 ) :[];
+var forEach = module.exports = function( aList, fnEach, scope ) { // jshint ignore:line
+    var aKeys = Object.keys( aList );
     var deferred = Q.defer();
     var i = -1;
-    var l = aItems.length;
+    var l = aKeys.length;
 
     // Check the callback.
     if( !fnEach ) {
@@ -25,7 +25,7 @@ var forEach = module.exports = function( aList, fnEach, scope ) {
 
     // Determines the function to call after each item.
     var doNext = function( nIdx ){
-        var ctx;
+        var ctx, key;
 
         if( typeof nIdx === 'number' ) {
             i = nIdx;
@@ -35,17 +35,19 @@ var forEach = module.exports = function( aList, fnEach, scope ) {
         }
 
         if( i >= l ){
-           return deferred.resolve( aItems );
+           return deferred.resolve( aList );
         }
 
+        // Determines the current key we are on.
+        key = aKeys[ i ];
         // Determines the scope/context of the callback.
-        ctx = scope || aItems[ i ];
+        ctx = scope || aList[ key ];
         
         try{
             fnEach.call( ctx, {
-                index: i, 
-                value: aItems[i],
-                array: aItems
+                index: key, 
+                value: aList[ key ],
+                list: aList
             }, doNext );
         }
         catch( e ) {
