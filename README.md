@@ -14,11 +14,11 @@ npm install git+https://github.com/lucentminds/promise-foreach.git
 ```js
 var forEach = require( 'promise-foreach' );
 
-forEach( [ 'a', 'b', 'c' ], function( oCurrent, next ){
+await forEach( [ 'a', 'b', 'c' ], async function( o_current, next ){
 
-    console.log( 'The current index is', oCurrent.index );
+    console.log( 'The current index is', o_current.index );
 
-    doSomethingAsync( oCurrent.value, function( err, result ){
+    await doSomethingAsync( o_current.value, function( err, result ){
         if( err ) {
             return console.log( 'Error:', err );
         }
@@ -29,10 +29,7 @@ forEach( [ 'a', 'b', 'c' ], function( oCurrent, next ){
         next();
     });
 
-})
-.then(function( aItems ){
-    
-    console.log( 'Done with all!' );
-
 });
+
+console.log( 'Done with all!' );
 ```

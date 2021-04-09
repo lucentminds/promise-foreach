@@ -9,13 +9,12 @@
 	"license": "MIT",
 	"version": "0.0.1",
 	"engines" : { 
-		"node" : ">=4.0.0" 
+		"node" : ">=15.10.0" 
 	},
 	"repository":{
 		"type": "git",
 		"url": "https://github.com/lucentminds/promise-foreach.git"
 	},
 	"dependencies": {
-		"q": ">=1.4.1"
 	}
 }

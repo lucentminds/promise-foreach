@@ -10,51 +10,55 @@
 /* jshint undef: true, unused: true */
 /* jslint node: true */
 
-var Q = require( 'q' );
-var forEach = module.exports = function( aList, fnEach, scope ) { // jshint ignore:line
-    var aKeys = Object.keys( aList );
-    var deferred = Q.defer();
-    var i = -1;
-    var l = aKeys.length;
+var forEach = module.exports = async function( a_source_list, fn_callback_each, scope ) { // jshint ignore:line
+    return new Promise(function(resolve, reject){
+        var a_keys = Object.keys( a_source_list );
+        var i = -1;
+        var l = a_keys.length;
 
-    // Check the callback.
-    if( !fnEach ) {
-        deferred.reject( 'Invalid callback for promise-foreach.' );
-        return deferred.promise;
-    }
-
-    // Determines the function to call after each item.
-    var doNext = function( nIdx ){
-        var ctx, key;
-
-        if( typeof nIdx === 'number' ) {
-            i = nIdx;
-        }
-        else {
-            ++i;
+        // Check the callback.
+        if( !fn_callback_each ) {
+            return reject( 'Invalid callback for promise-foreach.' );
         }
 
-        if( i >= l ){
-           return deferred.resolve( aList );
-        }
+        // Determines the function to call after each item.
+        var do_next = async function( nIdx ){
+            var ctx, key;
 
-        // Determines the current key we are on.
-        key = aKeys[ i ];
-        // Determines the scope/context of the callback.
-        ctx = scope || aList[ key ];
-        
-        try{
-            fnEach.call( ctx, {
+            if( typeof nIdx === 'number' ) {
+                i = nIdx;
+            }
+            else {
+                ++i;
+            }
+
+            if( i >= l ){
+                return resolve( a_source_list );
+            }
+
+            // Determines the current key we are on.
+            key = a_keys[ i ];
+
+            // Determines the scope/context of the callback.
+            ctx = scope || a_source_list[ key ];
+            const o_iter = {
                 index: key, 
-                value: aList[ key ],
-                list: aList
-            }, doNext );
-        }
-        catch( e ) {
-           return deferred.reject( e );
-        }
-    };// /doNext()    
+                value: a_source_list[ key ],
+                list: a_source_list,
+            };
+            
+            try{
+                new Promise(async function( resolve ){
+                    fn_callback_each.call( ctx, o_iter, resolve );
+                });
+            }
+            catch( e ) {
+                return reject( e );
+            }
 
-    doNext();
-    return deferred.promise;
+            do_next();
+        };// /do_next()
+
+        do_next();
+    });
 };// /forEach()
