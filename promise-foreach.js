@@ -48,14 +48,30 @@ var forEach = module.exports = async function( a_source_list, fn_callback_each, 
             };
             
             try{
-                new Promise(async function( resolve ){
-                    fn_callback_each.call( ctx, o_iter, resolve );
+                await new Promise(async function( resolve ){
+                    /** 
+                     * Apparantly you can use the "await" expression on
+                     * non-async functions, however according to the link below
+                     * there may be performance issues with doing so.
+                     * https://stackoverflow.com/questions/55262996/does-awaiting-a-non-promise-have-any-detectable-effect
+                     */
+                    // await fn_callback_each.call( ctx, o_iter, resolve );
+
+                    const c_constructor_name = fn_callback_each.constructor.name;
+                    const is_async_callback = c_constructor_name === 'AsyncFunction';
+                    if( is_async_callback ){
+                        await fn_callback_each.call( ctx, o_iter, resolve );
+                    }
+                    else{
+                        fn_callback_each.call( ctx, o_iter, resolve );
+                    }
                 });
             }
             catch( e ) {
                 return reject( e );
             }
 
+            // This should only happen after the fn_callback_each has completed.
             do_next();
         };// /do_next()
 
