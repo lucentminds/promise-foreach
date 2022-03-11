@@ -10,11 +10,11 @@
 /* jshint undef: true, unused: true */
 /* jslint node: true */
 
-var forEach = module.exports = async function( a_source_list, fn_callback_each, scope ) { // jshint ignore:line
+const for_each = async function( a_source_list, fn_callback_each, scope ) { // jshint ignore:line
     return new Promise(function(resolve, reject){
-        var a_keys = Object.keys( a_source_list );
+        const a_keys = Object.keys( a_source_list );
+        const l = a_keys.length;
         var i = -1;
-        var l = a_keys.length;
 
         // Check the callback.
         if( !fn_callback_each ) {
@@ -22,7 +22,7 @@ var forEach = module.exports = async function( a_source_list, fn_callback_each, 
         }
 
         // Determines the function to call after each item.
-        var do_next = async function( nIdx ){
+        const do_next = async function( nIdx ){
             var ctx, key;
 
             if( typeof nIdx === 'number' ) {
@@ -59,11 +59,16 @@ var forEach = module.exports = async function( a_source_list, fn_callback_each, 
 
                     const c_constructor_name = fn_callback_each.constructor.name;
                     const is_async_callback = c_constructor_name === 'AsyncFunction';
-                    if( is_async_callback ){
-                        await fn_callback_each.call( ctx, o_iter, resolve );
+                    try{
+                        if( is_async_callback ){
+                            await fn_callback_each.call( ctx, o_iter, resolve );
+                        }
+                        else{
+                            fn_callback_each.call( ctx, o_iter, resolve );
+                        }
                     }
-                    else{
-                        fn_callback_each.call( ctx, o_iter, resolve );
+                    catch( err ){
+                        return reject( err );
                     }
                 });
             }
@@ -77,4 +82,6 @@ var forEach = module.exports = async function( a_source_list, fn_callback_each, 
 
         do_next();
     });
-};// /forEach()
+};// /for_each()
+
+module.exports = for_each;
